@@ -1,7 +1,10 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$db = yii\helpers\ArrayHelper::merge(
+    require __DIR__ . '/db.php',
+    require __DIR__ . '/db-local.php'
+);
 
 $config = [
     'id' => 'basic',
@@ -43,32 +46,55 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
+        'gearman' => [
+            'class' => 'shakura\yii2\gearman\GearmanComponent',
+            'servers' => [
+                ['host' => '127.0.0.1', 'port' => 4730],
+            ],
+            'user' => 'root',
+            'jobs' => [
+                'grab_page' => [
+                    'class' => app\components\jobs\GrabPage::class
+                ],
+                'grab_article' => [
+                    'class' => app\components\jobs\GrabArticle::class
+                ],
+            ],
+
+        ],
     ],
     'params' => $params,
+    'controllerMap' => [
+        'gearman' => [
+            'class' => 'shakura\yii2\gearman\GearmanController',
+            'gearmanComponent' => 'gearman'
+        ]
+    ]
 ];
 
-if (YII_ENV_DEV) {
+if (YII_ENV_DEV)
+{
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['192.168.99.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['192.168.99.1', '::1'],
     ];
 }
 
