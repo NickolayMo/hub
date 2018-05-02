@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
+import './App.css'
+import PostList from './components/PostList/PostList';
+import Post from './components/Post/Post';
+import {pullPosts} from './actions';
 
 class App extends Component {
+    
+    componentDidMount(){
+        pullPosts().catch(function(error) {console.log(error)});
+    }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+        <BrowserRouter>
+          <div className="app container">
+              <nav className="app__header navbar navbar-light bg-light">
+                  <Link className="navbar-brand" to={'/'}>Hub</Link>
+              </nav>
+              <Route exact path='/:p?' component={PostList}/>
+              <Route path='/post/:id' component={Post}/>
+              <div className="app__footer bg-light">
+              </div>
+          </div>
+        </BrowserRouter>
     );
   }
 }

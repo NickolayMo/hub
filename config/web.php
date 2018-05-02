@@ -15,10 +15,14 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'dH7L8eUNYJKD0N4MvzKc4s-o8imEEp-X',
-        ],
+//        'request' => [
+//            'parsers' => [
+//                'application/json' => 'yii\web\JsonParser',
+//            ],
+//            'enableCookieValidation' => false,
+//            'cookieValidationKey' => 'my_secret_key',
+//
+//        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -49,10 +53,19 @@ $config = [
 
         'urlManager' => [
             'enablePrettyUrl' => true,
+           // 'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'post'],
             ],
         ],
+        'request' => [
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
+            'enableCookieValidation' => false,
+        ],
+
 
         'gearman' => [
             'class' => 'shakura\yii2\gearman\GearmanComponent',
@@ -69,6 +82,10 @@ $config = [
                 ],
             ],
 
+        ],
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+            'charset' => 'UTF-8',
         ],
     ],
     'params' => $params,

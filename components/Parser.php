@@ -6,10 +6,13 @@ use app\models\Post;
 
 class Parser
 {
+    const SOURCE = 'habr.com';
     protected $elementMap = [
         'title'=>'.//span[contains(@class,"post__title-text")]',
-        'content'=>'.//*[@data-io-article-url]'
+        'content'=>'.//*[@data-io-article-url]',
+        'author'=>'.//*[@class="post__meta"]//*[contains(@class, "user-info__nickname")]'
     ];
+    protected $unsetTags = ['script'];
     public function getPost($html, $url)
     {
         $hkey = md5($url);
@@ -23,44 +26,50 @@ class Parser
         $internalErrors = libxml_use_internal_errors(true);
         $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES',  'UTF-8'));
         libxml_use_internal_errors($internalErrors);
-        $xml = simplexml_import_dom($doc);
+        $htmlObj = simplexml_import_dom($doc);
         $model->hkey = $hkey;
         $model->link = $url;
-        $model->title = $this->getElement($xml, 'title');
-        $model->content = $this->getElement($xml, 'content');
+        $model->title = $this->getElement($htmlObj, 'title', false);
+        $model->author = $this->getElement($htmlObj, 'author', false);
+        $model->source = self::SOURCE;
+        $model->content = $this->getElement($htmlObj, 'content');
+        $model->publish_at = $this->getPublicationDate($html);
         $model->save();
     }
 
+    public function getPublicationDate($html)
+    {
+        preg_match('/article_publication_date":\s"([^"]+)/', $html, $matches);
+        if(!isset($matches[1]))
+        {
+            return null;
+        }
+        return date('Y-m-d H:i:m', strtotime($matches[1]));
+    }
+
     /**
-     * @param \SimpleXMLElement $xml
+     * @param \SimpleXMLElement $html
      * @param string $element
      * @return string
      */
-    public function getElement($xml, $element)
+    public function getElement($html, $element, $asHtml = true)
     {
         $result = '';
-        $data = $xml->xpath($this->elementMap[$element]);
+        $data = $html->xpath($this->elementMap[$element]);
         foreach ($data as $elem)
         {
-            $children = $elem->children();
-            if($children->count() > 0)
+
+            if($asHtml)
             {
-                /** @var \SimpleXMLElement $ch */
-                foreach ($elem->children() as $ch)
-                {
-                    $result .= (string)$ch->asXML();
-                }
+                $result .= (string)$elem->asXML();
             }
             else
             {
                 $result .= (string)$elem;
             }
-
         }
+
         return $result;
     }
-
-
-
 
 }
