@@ -2,27 +2,14 @@ import React, {Component} from 'react';
 import PostSpinner from '../PostSpinner/PostSpinner'
 import ReactPaginate from 'react-paginate';
 import './PostList.css';
-import {getPosts} from '../../actions';
 import PostItem from "../PostItem/PostItem";
+import {connect} from "react-redux";
+import * as actions from '../../actions';
 
 class PostList extends Component
 {
-    constructor() {
-        super();
-        this.state = {
-            posts: null,
-            pageCount: 0,
-            currentPage: 0
-        };
-    }
     fetchData(p){
-        getPosts(p)
-            .then(data => {this.setState({
-                posts: data.data,
-                currentPage: +data.headers['x-pagination-current-page'],
-                pageCount: +data.headers['x-pagination-page-count']
-            });})
-            .catch(function(error) {console.log(error)});
+        this.props.getPosts(p);
     }
     componentDidMount() {
         let p = this.props.match.params.p;
@@ -33,19 +20,19 @@ class PostList extends Component
         let selected = data.selected;
         this.fetchData(selected+1);
     };
-    renderPosts(post, index) {
+    static renderPosts(post, index) {
         return <PostItem key={index} post={post}/>
     }
     render(){
-        const { posts} = this.state;
+        const { posts} = this.props;
         return (<div className="post-list">
             <h2 className="post-list__header">Список статей</h2>
             <div className="row">
                 <div className="post-list__content col-md-12" >
                     <div className="list-group">
                     {
-                        posts ?
-                            posts.map(this.renderPosts)
+                        posts.data ?
+                            posts.data.map(PostList.renderPosts)
                             :
                             <PostSpinner/>
                     }
@@ -57,7 +44,7 @@ class PostList extends Component
                            nextLabel={"Вперед"}
                            breakLabel={<a href="">...</a>}
                            breakClassName={"break-me"}
-                           pageCount={this.state.pageCount}
+                           pageCount={posts.pageCount}
                            marginPagesDisplayed={2}
                            pageRangeDisplayed={5}
                            onPageChange={this.handlePageClick}
@@ -74,6 +61,8 @@ class PostList extends Component
             </nav>
         </div>);
     }
-
 }
-export default PostList;
+function mapStateToProps({posts}) {
+    return {posts}
+}
+export default connect(mapStateToProps, actions)(PostList);

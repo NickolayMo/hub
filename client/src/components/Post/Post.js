@@ -1,18 +1,13 @@
 import React, {Component} from 'react';
 import PostSpinner from '../PostSpinner/PostSpinner';
-import {getPost} from '../../actions';
+import * as actions from '../../actions';
+import {connect} from  'react-redux';
 
 class Post extends Component
 {
-    constructor() {
-        super();
-        this.state = { post: null };
-    }
     componentDidMount() {
         let id = this.props.match.params.id;
-        getPost(id)
-            .then(data => this.setState({ post: data.data }))
-            .catch(function(error) {console.log(error)});
+        this.props.getPost(id);
     };
     renderTitle = (post)=>{
         if(!post)
@@ -22,7 +17,7 @@ class Post extends Component
         return <h2>{post.title}( <a target="_blank" href={post.link}><small>Оригинал статьи</small></a>)</h2>
     };
     render(){
-        const { post } = this.state;
+        const { post } = this.props.posts;
         return (
             <div>
                 {this.renderTitle(post)}
@@ -32,4 +27,7 @@ class Post extends Component
         );
     }
 }
-export default Post;
+function mapStateToProps({posts}) {
+    return {posts}
+}
+export default connect(mapStateToProps, actions)(Post);

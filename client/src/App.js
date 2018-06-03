@@ -3,14 +3,14 @@ import {BrowserRouter, Route, Link} from 'react-router-dom';
 import './App.css'
 import PostList from './components/PostList/PostList';
 import Post from './components/Post/Post';
-import {pullPosts} from './actions';
+import * as actions from './actions';
+import {connect} from 'react-redux';
 
 class App extends Component {
 
     componentDidMount() {
-        pullPosts().catch(function (error) {
-            console.log(error)
-        });
+        this.props.pullPosts();
+
     }
 
     render() {
@@ -30,4 +30,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default connect(null, actions)(App);
