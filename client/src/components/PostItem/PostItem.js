@@ -5,7 +5,7 @@ class PostItem extends Component
 {
     render(){
         return (
-            <Link className="post-list__item list-group-item list-group-item-action" to={'post/' + this.props.post.id}>
+            <Link className="post-list__item list-group-item list-group-item-action" to={'/post/' + this.props.post.id}>
                 <div>
                     <h4>{this.props.post.title}</h4>
                 </div>

@@ -1,17 +1,44 @@
 import axios from 'axios';
-import {PULL_POSTS, GET_POSTS, GET_POST} from './types';
+import * as types from './types';
+const apiUrl = 'http://local.api.project.com:8801';
 export const pullPosts = ()=>async dispatch=>{
-    const res = await axios.get('http://local.api.project.com:8801/post/pull');
-    dispatch({type:PULL_POSTS, payload:res});
+    try
+    {
+        const res = await axios.get(apiUrl+'/post/pull');
+        dispatch({type:types.PULL_POSTS, payload:res});
+    }
+    catch (e)
+    {
+        console.log(e);
+    }
+
 };
 
 export const getPosts = (page)=> async dispatch =>{
     let pageNum = page ? '?page='+page : '';
-    const res = await axios.get('http://local.api.project.com:8801/posts'+pageNum);
-    dispatch({type:GET_POSTS, payload:res});
+    try
+    {
+        dispatch({type:types.POST_LIST_GET_REQUEST});
+        const res = await axios.get(apiUrl+'/posts'+pageNum);
+        dispatch({type:types.GET_POST_LIST, payload:res});
+    }
+    catch (e)
+    {
+        dispatch({type:types.POST_LIST_GET_ERROR, payload:e});
+    }
+
 };
 
 export const getPost = (id)=> async dispatch=>{
-    const res = await axios.get('http://local.api.project.com:8801/posts/'+id);
-    dispatch({type:GET_POST, payload:res});
+    try
+    {
+        dispatch({type:types.POST_GET_REQUEST});
+        const res = await axios.get(apiUrl+'/posts/'+id);
+        dispatch({type:types.GET_POST, payload:res});
+    }
+    catch (e)
+    {
+        dispatch({type:types.POST_GET_ERROR, payload:e});
+    }
+
 };

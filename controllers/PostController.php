@@ -22,7 +22,7 @@ class PostController extends ActiveController
                 'class' => \yii\filters\Cors::className(),
                 'cors' => [
                     // restrict access to
-                    'Origin' => ['http://localhost:3000'],
+                    'Origin' => ['*'],
                     'Access-Control-Request-Method' => ['GET'],
                     'Access-Control-Allow-Credentials' => true,
                     // Allow OPTIONS caching
@@ -52,23 +52,6 @@ class PostController extends ActiveController
         $search = new PostSearch();
         return $search->search(\Yii::$app->request->getQueryParams());
     }
-//    public function behaviors()
-//    {
-//        return [
-//            [
-//                'class' => \yii\filters\ContentNegotiator::className(),
-//                'formats' => [
-//                    'application/json' => \yii\web\Response::FORMAT_JSON,
-//                ],
-//            ],
-//        ];
-//    }
-//
-//    /**
-//     * Displays homepage.
-//     *
-//     * @return string
-//     */
     public function actionGet()
     {
             $query = Post::find();

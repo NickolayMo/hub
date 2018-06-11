@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './App.css'
-import PostList from './components/PostList/PostList';
-import Post from './components/Post/Post';
+import PostList from './containers/PostList/PostList';
+import Post from './containers/Post/Post';
 import Header from './components/Header/Header';
 import * as actions from './actions';
 import {connect} from 'react-redux';
+import NotFound from "./components/NotFound/NotFound";
 
 class App extends Component {
 
@@ -18,8 +19,12 @@ class App extends Component {
             <BrowserRouter>
                 <div className="app container">
                     <Header/>
-                    <Route exact path='/:p?' component={PostList}/>
-                    <Route path='/post/:id' component={Post}/>
+                    <Switch>
+                        <Route exact path='/' component={PostList}/>
+                        <Route exact path='/page/:num' component={PostList}/>
+                        <Route path='/post/:id' component={Post}/>
+                        <Route component={NotFound}/>
+                    </Switch>
                     <div className="app__footer bg-light">
                     </div>
                 </div>
