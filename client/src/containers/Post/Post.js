@@ -3,6 +3,9 @@ import PostSpinner from '../../components/PostSpinner/PostSpinner';
 import * as actions from '../../actions';
 import {connect} from  'react-redux';
 
+/**
+ * Страница поста
+ */
 class Post extends Component
 {
     componentDidMount() {

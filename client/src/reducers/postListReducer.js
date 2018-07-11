@@ -8,7 +8,12 @@ export const initialState = {
     currentPage: 0,
     pageCount: 0
 };
-
+/**
+ * Обработчик событий для странцы постов
+ * @param state
+ * @param action
+ * @returns {*}
+ */
 export default function (state=initialState, action){
     switch (action.type){
         case PULL_POSTS:

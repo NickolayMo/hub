@@ -1,14 +1,9 @@
 <?php
 
 namespace app\controllers;
-
-use app\models\Post;
+use app\components\Site;
 use app\models\PostSearch;
-use shakura\yii2\gearman\JobWorkload;
-use Yii;
-use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
-use yii\rest\Controller;
 
 class PostController extends ActiveController
 {
@@ -42,9 +37,19 @@ class PostController extends ActiveController
 
     public function actions()
     {
-        $actions = parent::actions();
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-        return $actions;
+        return [
+            'index' => [
+                'class' => 'yii\rest\IndexAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+                'prepareDataProvider' => [$this, 'prepareDataProvider']
+            ],
+            'view' => [
+                'class' => 'yii\rest\ViewAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+            ]
+        ];
     }
 
     public function prepareDataProvider()
@@ -52,28 +57,10 @@ class PostController extends ActiveController
         $search = new PostSearch();
         return $search->search(\Yii::$app->request->getQueryParams());
     }
-    public function actionGet()
-    {
-            $query = Post::find();
-            $dataProvider = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
-            ]);
-           $dataProvider->getModels();
-
-        return $dataProvider;
-    }
 
     public function actionPull()
     {
-        Yii::$app->gearman->getDispatcher()->background('grab_page', new JobWorkload([
-            'params' => [
-                'url' => 'https://habr.com/all/'
-            ]
-        ]));
-        return true;
+        return Site::getAll();
     }
 
 }

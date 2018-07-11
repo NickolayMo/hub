@@ -14,12 +14,12 @@ export const pullPosts = ()=>async dispatch=>{
 
 };
 
-export const getPosts = (page)=> async dispatch =>{
-    let pageNum = page ? '?page='+page : '';
+export const getPosts = (get)=> async dispatch =>{
+    let request = get ? get.join('&'): '';
     try
     {
         dispatch({type:types.POST_LIST_GET_REQUEST});
-        const res = await axios.get(apiUrl+'/posts'+pageNum);
+        const res = await axios.get(apiUrl+'/posts?'+request);
         dispatch({type:types.GET_POST_LIST, payload:res});
     }
     catch (e)

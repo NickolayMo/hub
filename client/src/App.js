@@ -8,6 +8,9 @@ import * as actions from './actions';
 import {connect} from 'react-redux';
 import NotFound from "./components/NotFound/NotFound";
 
+/**
+ * Компоненент приложения
+ */
 class App extends Component {
 
     componentDidMount() {

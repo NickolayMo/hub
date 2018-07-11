@@ -6,7 +6,12 @@ export const initialState = {
     isLoading: false,
     errorMsg: null,
 };
-
+/**
+ * Обработчик событий для странцы поста
+ * @param state
+ * @param action
+ * @returns {*}
+ */
 export default function (state=initialState, action){
     switch (action.type){
         case GET_POST:
@@ -27,8 +32,8 @@ export default function (state=initialState, action){
             );
             return {
                 ...state,
-                errorMsg: action.payload,
-                isLoading: false,
+                errorMsg: action.payload,                isLoading: false,
+
             };
         default:
             return state;

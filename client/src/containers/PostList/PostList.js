@@ -6,10 +6,14 @@ import PostItem from "../../components/PostItem/PostItem";
 import {connect} from "react-redux";
 import * as actions from '../../actions';
 
+/**
+ * Список постов
+ */
 class PostList extends Component
 {
     fetchData(p){
-        this.props.getPosts(p);
+        let query = p ? ['page='+ p] : [];
+        this.props.getPosts(query);
     }
     componentDidMount() {
         let p = this.props.match.params.num;

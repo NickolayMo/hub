@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import Loader from 'react-loader-spinner'
 import './PostSpinner.css';
 
+/**
+ * Красивый спиннер
+ */
 class PostSpinner extends Component
 {
     render(){
