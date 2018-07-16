@@ -4,6 +4,7 @@ import './App.css'
 import PostList from './containers/PostList/PostList';
 import Post from './containers/Post/Post';
 import Header from './components/Header/Header';
+import SearchList from './containers/SearchList/SearchList';
 import * as actions from './actions';
 import {connect} from 'react-redux';
 import NotFound from "./components/NotFound/NotFound";
@@ -24,6 +25,7 @@ class App extends Component {
                     <Header/>
                     <Switch>
                         <Route exact path='/' component={PostList}/>
+                        <Route exact path='/search/:num?' component={SearchList}/>
                         <Route exact path='/page/:num' component={PostList}/>
                         <Route path='/post/:id' component={Post}/>
                         <Route component={NotFound}/>

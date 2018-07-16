@@ -1,0 +1,11 @@
+.post-list__item
+{
+    border: none;
+}
+.post-list__header{
+    margin-bottom: 15px;
+}
+.not-found{
+    text-align: center;
+
+}

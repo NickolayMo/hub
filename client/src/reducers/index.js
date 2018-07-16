@@ -5,4 +5,5 @@ import {combineReducers} from 'redux';
 export default combineReducers({
     post: postReducer,
     postsList: postListReducer,
+    searchList: postListReducer,
 });
