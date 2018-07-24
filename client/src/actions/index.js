@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as types from './types';
-const apiUrl = 'http://local.api.project.com:8801';
+const apiUrl = 'http://awesome.test';
 export const pullPosts = ()=>async dispatch=>{
     try
     {

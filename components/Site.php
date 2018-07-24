@@ -12,6 +12,7 @@ use Yii;
 class Site
 {
     const SITE_URL = 'https://habr.com';
+    const LIMIT = 10;
 
     /**
      * Получение всех новых статей
@@ -19,12 +20,19 @@ class Site
      */
     public static function getAll()
     {
-        Yii::$app->gearman->getDispatcher()->background('grab_page', new JobWorkload([
-            'params' => [
-                'url' => self::SITE_URL.'/all/'
-            ]
-        ]));
 
+        $page = 1;
+        while ($page <= self::LIMIT)
+        {
+            Yii::$app->gearman->getDispatcher()->background(
+                'grab_page',
+                new JobWorkload([
+                                     'params' => [
+                                         'url' => self::SITE_URL.'/all/page'.$page.'/'
+                                     ]
+                                 ]));
+            $page++;
+        }
         return true;
     }
 
