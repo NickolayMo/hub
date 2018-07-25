@@ -14,7 +14,7 @@ import NotFound from "./components/NotFound/NotFound";
 class App extends Component {
 
     componentDidMount() {
-        this.props.pullPosts();
+        //this.props.pullPosts();
 
     }
     render() {

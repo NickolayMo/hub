@@ -60,7 +60,7 @@ class PostController extends ActiveController
 
     public function actionPull()
     {
-        //return Site::getAll();
+        return Site::getAll();
     }
 
 }
