@@ -1,10 +1,10 @@
 import axios from 'axios';
 import * as types from './types';
-const apiUrl = 'http://awesome.test';
+const apiUrl = process.env.REACT_APP_DATA_URL;
 export const pullPosts = ()=>async dispatch=>{
     try
     {
-        const res = await axios.get(apiUrl+'/post/pull');
+        const res = await axios.get( apiUrl +'/post/pull');
         dispatch({type:types.PULL_POSTS, payload:res});
     }
     catch (e)
@@ -19,7 +19,7 @@ export const getPosts = (get)=> async dispatch =>{
     try
     {
         dispatch({type:types.POST_LIST_GET_REQUEST});
-        const res = await axios.get(apiUrl+'/posts?'+request);
+        const res = await axios.get( apiUrl +'/posts?'+request);
         dispatch({type:types.GET_POST_LIST, payload:res});
     }
     catch (e)
@@ -33,7 +33,7 @@ export const getPost = (id)=> async dispatch=>{
     try
     {
         dispatch({type:types.POST_GET_REQUEST});
-        const res = await axios.get(apiUrl+'/posts/'+id);
+        const res = await axios.get( apiUrl +'/posts/'+id);
         dispatch({type:types.GET_POST, payload:res});
     }
     catch (e)
